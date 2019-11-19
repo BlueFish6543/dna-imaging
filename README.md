@@ -15,7 +15,7 @@ python pca.py images/gel1.png
 
 ## Sample output
 
-![Sample output image](screenshot.png)
+![Sample output image](images/screenshot.png)
 
 ## Tutorials
 
