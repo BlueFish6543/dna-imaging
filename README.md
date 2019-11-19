@@ -1,6 +1,6 @@
 # DNA Imaging
 
-## Setup
+## Python setup
 
 Dependencies: `numpy, opencv-python`.
 
