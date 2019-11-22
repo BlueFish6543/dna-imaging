@@ -133,7 +133,7 @@ void showContours(cv::Mat &src) {
 int main(int argc, char** argv) {
     // Load image
     cv::CommandLineParser parser(argc, argv, "{@input | | input image}");
-    parser.about("This program uses OpenCV PCA to extract the coordinates of DNA bands.\n");
+    parser.about("This program uses OpenCV to extract the coordinates of DNA bands.\n");
     parser.printMessage();
 
     cv::Mat src = cv::imread(cv::samples::findFile(parser.get<cv::String>("@input")));

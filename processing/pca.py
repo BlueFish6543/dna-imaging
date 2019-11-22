@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 NUM_COLOURS = 8
-THRESHOLD = 3  # between 1 and NUM_COLOURS inclusive, lower is more selective
+THRESHOLD = 5  # between 1 and NUM_COLOURS inclusive, lower is more selective
 
 
 class Image:
@@ -102,6 +102,7 @@ class Image:
             self._get_orientation(contours[i])
 
     def show(self):
+        cv2.namedWindow("output", cv2.WINDOW_NORMAL)
         cv2.imshow("output", self.img)
 
     def get_centres(self):
