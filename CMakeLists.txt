@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenCV REQUIRED)
 
-set(SOURCE_FILES cpp/pca.cpp)
+set(SOURCE_FILES cpp/main.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
