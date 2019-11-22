@@ -1,13 +1,18 @@
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
+#include "opencv2/imgcodecs.hpp"
 #include <iostream>
+
+static const int NUM_COLOURS = 8;
+static const int THRESHOLD = 3; // between 1 and NUM_COLOURS inclusive, lower is more selective
 
 // Function declarations
 void drawAxis(cv::Mat&, cv::Point, cv::Point, const cv::Scalar &, float);
 double getOrientation(const std::vector<cv::Point> &, cv::Mat &);
 inline void mixChannels(const cv::Mat &, cv::Mat &, std::initializer_list<int>);
-void colorQuantize(const cv::Mat &, cv::Mat &);
+cv::Mat colorQuantize(const cv::Mat &src, cv::Mat &dst);
+void showContours(cv::Mat &src, int thresh);
 
 void drawAxis(cv::Mat &img, cv::Point p, cv::Point q, const cv::Scalar &colour, const float scale = 0.2) {
     double angle = atan2((double) p.y - q.y, (double) p.x - q.x); // angle in radians
@@ -72,18 +77,20 @@ inline void mixChannels(const cv::Mat &src, cv::Mat &dst, std::initializer_list<
 }
 
 // https://answers.opencv.org/question/182006/opencv-c-k-means-color-clustering/
-void colorQuantize(const cv::Mat &src, cv::Mat &dst) {
+cv::Mat colorQuantize(const cv::Mat &src, cv::Mat &dst) {
     cv::Mat data;
     src.convertTo(data, CV_32F);
     data = data.reshape(1, static_cast<int>(data.total()));
 
     cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 10, 1.0);
-    int K = 8;
     cv::Mat labels, centres;
-    cv::kmeans(data, K, labels, criteria, 10, cv::KMEANS_RANDOM_CENTERS, centres);
+    cv::kmeans(data, NUM_COLOURS, labels, criteria, 10, cv::KMEANS_RANDOM_CENTERS, centres);
 
     centres = centres.reshape(3, centres.rows);
     data = data.reshape(3, data.rows);
+    cv::Mat intensities;
+    cv::cvtColor(centres, intensities, cv::COLOR_BGR2GRAY);
+    cv::sort(intensities, intensities, cv::SORT_EVERY_COLUMN + cv::SORT_ASCENDING);
 
     auto *p = data.ptr<cv::Vec3f>();
     for (size_t i = 0; i < data.rows; i++) {
@@ -93,11 +100,54 @@ void colorQuantize(const cv::Mat &src, cv::Mat &dst) {
 
     dst = data.reshape(3, src.rows);
     dst.convertTo(dst, CV_8U);
+
+    return intensities;
+}
+
+void showContours(cv::Mat &src) {
+    cv::Mat quantized, intensities;
+    intensities = colorQuantize(src, quantized);
+    int thresh = static_cast<int>(intensities.at<float>(NUM_COLOURS - THRESHOLD)) - 2;
+//    cv::imshow("quantized", quantized);
+
+    // Convert image to grayscale
+    cv::Mat gray;
+    cv::cvtColor(quantized, gray, cv::COLOR_BGR2GRAY);
+
+    // Convert image to hsv
+    cv::Mat hsv;
+    cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
+    cv::Mat hue(src.size(), CV_8U);
+    mixChannels(hsv, hue, {0, 0});
+
+    // Convert image to binary
+    cv::Mat bw;
+    threshold(gray, bw, thresh, 255, cv::THRESH_BINARY);
+//    threshold(gray, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+//    cv::threshold(hue, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+
+    // Find all the contours in the threshold range
+    std::__1::vector<std::__1::vector<cv::Point>> contours;
+    findContours(bw, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
+
+    for (size_t i = 0; i < contours.size(); i++) {
+        // Calculate the area of each contour
+        double area = contourArea(contours[i]);
+        // Ignore contours that are too small or too large
+        if (area < 1e2 || area > 1e5) continue;
+
+        // Draw each contour only for visualisation purposes
+        drawContours(src, contours, static_cast<int>(i), cv::Scalar(0, 0, 255), 2);
+        // Find the orientation of each shape
+        getOrientation(contours[i], src);
+    }
+
+    cv::imshow("output", src);
 }
 
 int main(int argc, char** argv) {
     // Load image
-    cv::CommandLineParser parser(argc, argv, "{@input | gel1.png | input image}");
+    cv::CommandLineParser parser(argc, argv, "{@input | | input image}");
     parser.about("This program demonstrates how to use OpenCV PCA to extract the orientation of an object.\n");
     parser.printMessage();
 
@@ -109,45 +159,9 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    cv::imshow("src", src);
-
-    cv::Mat quantized;
-    colorQuantize(src, quantized);
-    cv::imshow("quantized", quantized);
-
-    // Convert image to grayscale
-    cv::Mat gray;
-    cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
-
-    // Convert image to hsv
-    cv::Mat hsv;
-    cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
-    cv::Mat hue(src.size(), CV_8U);
-    mixChannels(hsv, hue, {0, 0});
-
-    // Convert image to binary
-    cv::Mat bw;
-    cv::threshold(gray, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-//    cv::threshold(hue, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-
-    // Find all the contours in the threshold range
-    std::vector<std::vector<cv::Point>> contours;
-    cv::findContours(bw, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
-
-    for (size_t i = 0; i < contours.size(); i++) {
-        // Calculate the area of each contour
-        double area = cv::contourArea(contours[i]);
-        // Ignore contours that are too small or too large
-        if (area < 1e2 || area > 1e5) continue;
-
-        // Draw each contour only for visualisation purposes
-        cv::drawContours(src, contours, static_cast<int>(i), cv::Scalar(0, 0, 255), 2);
-        // Find the orientation of each shape
-        getOrientation(contours[i], src);
-    }
-
-    cv::imshow("output", src);
+    showContours(src);
 
     cv::waitKey();
     return EXIT_SUCCESS;
 }
+

@@ -108,3 +108,6 @@ venv.bak/
 
 # CMake
 cmake-build-debug/
+
+# Mac
+.DS_Store
