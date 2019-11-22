@@ -10,9 +10,8 @@ static const int THRESHOLD = 3; // between 1 and NUM_COLOURS inclusive, lower is
 // Function declarations
 void drawAxis(cv::Mat&, cv::Point, cv::Point, const cv::Scalar &, float);
 double getOrientation(const std::vector<cv::Point> &, cv::Mat &);
-inline void mixChannels(const cv::Mat &, cv::Mat &, std::initializer_list<int>);
 cv::Mat colorQuantize(const cv::Mat &src, cv::Mat &dst);
-void showContours(cv::Mat &src, int thresh);
+void showContours(cv::Mat &src);
 
 void drawAxis(cv::Mat &img, cv::Point p, cv::Point q, const cv::Scalar &colour, const float scale = 0.2) {
     double angle = atan2((double) p.y - q.y, (double) p.x - q.x); // angle in radians
@@ -71,11 +70,6 @@ double getOrientation(const std::vector<cv::Point> &pts, cv::Mat &img) {
     return angle;
 }
 
-// https://answers.opencv.org/question/22442/automatic-threshold-using-hue-channel/
-inline void mixChannels(const cv::Mat &src, cv::Mat &dst, std::initializer_list<int> fromTo) {
-    cv::mixChannels(&src, 1, &dst, 1, std::begin(fromTo), fromTo.size() / 2);
-}
-
 // https://answers.opencv.org/question/182006/opencv-c-k-means-color-clustering/
 cv::Mat colorQuantize(const cv::Mat &src, cv::Mat &dst) {
     cv::Mat data;
@@ -108,23 +102,14 @@ void showContours(cv::Mat &src) {
     cv::Mat quantized, intensities;
     intensities = colorQuantize(src, quantized);
     int thresh = static_cast<int>(intensities.at<float>(NUM_COLOURS - THRESHOLD)) - 2;
-//    cv::imshow("quantized", quantized);
 
     // Convert image to grayscale
     cv::Mat gray;
     cv::cvtColor(quantized, gray, cv::COLOR_BGR2GRAY);
 
-    // Convert image to hsv
-    cv::Mat hsv;
-    cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
-    cv::Mat hue(src.size(), CV_8U);
-    mixChannels(hsv, hue, {0, 0});
-
     // Convert image to binary
     cv::Mat bw;
     threshold(gray, bw, thresh, 255, cv::THRESH_BINARY);
-//    threshold(gray, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-//    cv::threshold(hue, bw, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
 
     // Find all the contours in the threshold range
     std::__1::vector<std::__1::vector<cv::Point>> contours;
@@ -148,7 +133,7 @@ void showContours(cv::Mat &src) {
 int main(int argc, char** argv) {
     // Load image
     cv::CommandLineParser parser(argc, argv, "{@input | | input image}");
-    parser.about("This program demonstrates how to use OpenCV PCA to extract the orientation of an object.\n");
+    parser.about("This program uses OpenCV PCA to extract the coordinates of DNA bands.\n");
     parser.printMessage();
 
     cv::Mat src = cv::imread(cv::samples::findFile(parser.get<cv::String>("@input")));
@@ -164,4 +149,3 @@ int main(int argc, char** argv) {
     cv::waitKey();
     return EXIT_SUCCESS;
 }
-
