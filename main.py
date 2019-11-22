@@ -4,6 +4,9 @@ import argparse
 import sys
 import copy
 
+NUM_COLOURS = 8
+THRESHOLD = 3  # between 1 and NUM_COLOURS inclusive, lower is more selective
+
 
 def draw_axis(img, p, q, colour, scale=0.2):
     angle = np.arctan2(p[1] - q[1], p[0] - q[0])
@@ -50,6 +53,55 @@ def get_orientation(pts, img):
     return np.arctan2(eigenvectors[0, 1], eigenvectors[0, 0])  # orientation in radians
 
 
+def color_quantize(img):
+    shape = img.shape
+    img = img.reshape((-1, 3))
+    img = np.float32(img)
+
+    # Define criteria and apply kmeans
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    ret, label, centre = cv2.kmeans(img, NUM_COLOURS, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    intensities = cv2.cvtColor(np.array([centre]), cv2.COLOR_BGR2GRAY)
+    intensities = np.int64(np.sort(np.squeeze(intensities)))
+
+    # Convert back into uint8 and make original image
+    centre = np.uint8(centre)
+    res = centre[label.flatten()]
+    res = res.reshape(shape)
+
+    return res, intensities
+
+
+def show_contours(src):
+    quantized, intensities = color_quantize(src)
+
+    # Convert image to grayscale
+    gray = cv2.cvtColor(quantized, cv2.COLOR_BGR2GRAY)
+
+    # Convert image to binary
+    thresh = intensities[NUM_COLOURS - THRESHOLD] - 2
+    retval, bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
+
+    # Find all the contours in the threshold range
+    contours, hierarchy = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+
+    for i in range(len(contours)):
+        # Calculate the area in each contour
+        area = cv2.contourArea(contours[i])
+
+        # Ignore contours that are too small or too large
+        if (area < 1e2) or (area > 1e5):
+            continue
+
+        # Draw each contour only for visualisation purposes
+        cv2.drawContours(src, contours, i, (0, 0, 255), 2)
+
+        # Find the orientation of each shape
+        get_orientation(contours[i], src)
+
+    cv2.imshow("output", src)
+
+
 def main():
     # Load image
     parser = argparse.ArgumentParser(description=
@@ -64,30 +116,7 @@ def main():
         print("Problem loading image!")
         sys.exit(1)
 
-    cv2.imshow("src", src)
-
-    # Convert image to grayscale
-    gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-
-    # Convert image to binary
-    retval, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-
-    # Find all the contours in the threshold range
-    contours, hierarchy = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-
-    for i in range(len(contours)):
-        # Calculate the area in each contour
-        area = cv2.contourArea(contours[i])
-        # Ignore contours that are too small or too large
-        if (area < 1e2) or (area > 1e5):
-            continue
-
-        # Draw each contour only for visualisation purposes
-        cv2.drawContours(src, contours, i, (0, 0, 255), 2)
-        # Find the orientation of each shape
-        get_orientation(contours[i], src)
-
-    cv2.imshow("output", src)
+    show_contours(src)
 
     cv2.waitKey()
     sys.exit(0)
