@@ -5,7 +5,7 @@ from processing import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-NUM_COLUMNS = 6
+NUM_COLUMNS = 5
 
 
 def plot_calibration_data(calibration_data):
