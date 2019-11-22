@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 NUM_COLOURS = 8
-THRESHOLD = 5  # between 1 and NUM_COLOURS inclusive, lower is more selective
+THRESHOLD = 4  # between 1 and NUM_COLOURS inclusive, lower is more selective
 
 
 class Image:

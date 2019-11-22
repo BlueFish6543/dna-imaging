@@ -1,9 +1,11 @@
 import cv2
 import argparse
 import sys
-from processing.pca import Image
+from processing import Image
 import numpy as np
 import matplotlib.pyplot as plt
+
+NUM_COLUMNS = 6
 
 
 def plot_calibration_data(calibration_data):
@@ -16,8 +18,34 @@ def plot_calibration_data(calibration_data):
     plt.xlabel("$y$ coordinate")
     plt.ylabel("Value")
     plt.grid()
-
     return p
+
+
+def calibrate(coords):
+    calibration_data = []
+    for coord in np.sort(coords[0]):
+        while True:
+            val = input("Enter value for reference point at y coordinate {}:\n".format(coord))
+            try:
+                val = int(val)
+                break
+            except ValueError:
+                print("Invalid input. Try again.")
+        calibration_data.append([coord, val])
+    calibration_data = np.array(calibration_data)
+    return calibration_data
+
+
+def sort_into_bins(centres):
+    centres = centres[np.argsort(centres[:, 0])]  # sort in ascending x coordinates
+    hist = plt.hist(centres[:, 0], bins=NUM_COLUMNS)[0]
+    coords = []
+    idx = 0
+    for i in range(len(hist)):
+        coords.append(centres[idx:idx + int(hist[i]), 1])
+        idx += int(hist[i])
+    # print(coords)
+    return coords
 
 
 def main():
@@ -38,40 +66,20 @@ def main():
     image.show()
 
     centres = image.get_centres()
-    centres = centres[np.argsort(centres[:, 0])]  # sort in ascending x coordinates
-    hist = plt.hist(centres[:, 0], bins=5)[0]
+    coords = sort_into_bins(centres)
 
-    coords = []
-    idx = 0
-    for i in range(len(hist)):
-        coords.append(centres[idx:idx + int(hist[i]), 1])
-        idx += int(hist[i])
-    # print(coords)
+    if len(coords[0]) < 4:
+        print("Insufficient data points to generate calibration line.")
 
-    if len(coords[0]) < 5:
-        print("Insufficient data points to generate calibration line. Program will terminate.\n")
-        sys.exit(2)
+    else:
+        calibration_data = calibrate(coords)
+        p = plot_calibration_data(calibration_data)
+        for i in range(1, len(coords)):
+            values = np.exp(p(coords[i]))
+            plt.scatter(coords[i], values, label="Column {}".format(i))
+        plt.legend()
+        plt.show()
 
-    calibration_data = []
-    for coord in np.sort(coords[0]):
-        while True:
-            val = input("Enter value for reference point at y coordinate {}:\n".format(coord))
-            try:
-                val = int(val)
-                break
-            except ValueError:
-                print("Invalid input. Try again.")
-        calibration_data.append([coord, val])
-    calibration_data = np.array(calibration_data)
-
-    p = plot_calibration_data(calibration_data)
-
-    for i in range(1, len(coords)):
-        values = np.exp(p(coords[i]))
-        plt.scatter(coords[i], values, label="Column {}".format(i))
-
-    plt.legend()
-    plt.show()
     cv2.waitKey()
     sys.exit(0)
 
