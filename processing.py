@@ -85,7 +85,7 @@ class Image:
         retval, bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
 
         # Find all the contours in the threshold range
-        contours, hierarchy = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        _, contours, _ = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
         for i in range(len(contours)):
             # Calculate the area in each contour
