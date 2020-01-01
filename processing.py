@@ -88,11 +88,9 @@ class Image:
         _, contours, _ = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
         for i in range(len(contours)):
-            # Calculate the area in each contour
-            area = cv2.contourArea(contours[i])
-
+            x, y, w, h = cv2.boundingRect(contours[i])
             # Ignore contours that are too small or too large
-            if (area < 1e2) or (area > 1e5):
+            if (w < 10) or (w > 100):
                 continue
 
             # Draw each contour only for visualisation purposes
