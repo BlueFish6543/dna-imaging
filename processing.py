@@ -4,13 +4,13 @@ import cv2
 import numpy as np
 
 NUM_COLOURS = 8
-THRESHOLD = 5  # between 1 and NUM_COLOURS inclusive, lower is more selective
 
 
 class Image:
-    def __init__(self, src):
+    def __init__(self, src, threshold):
         self.img = src
         self.centres = []
+        self.threshold = threshold
 
     def _draw_axis(self, p, q, colour, scale=0.2):
         angle = np.arctan2(p[1] - q[1], p[0] - q[0])
@@ -81,7 +81,7 @@ class Image:
         gray = cv2.cvtColor(quantized, cv2.COLOR_BGR2GRAY)
 
         # Convert image to binary
-        thresh = intensities[NUM_COLOURS - THRESHOLD] - 2
+        thresh = intensities[NUM_COLOURS - self.threshold] - 2
         retval, bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
 
         # Find all the contours in the threshold range
