@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 NUM_COLUMNS = 5
 LADDER_THRESHOLD = 5
-SAMPLE_THRESHOLD = 3
+SAMPLE_THRESHOLD = 1
 
 
 def plot_calibration_data(calibration_data):
@@ -47,8 +47,18 @@ def sort_into_bins(centres):
     for i in range(len(hist)):
         coords.append(centres[idx:idx + int(hist[i]), 1])
         idx += int(hist[i])
-    # print(coords)
     return coords, bins
+    
+
+def process_image(src, threshold):
+    image = Image(src, threshold)
+    image.draw_contours()
+    
+    centres = image.get_centres()
+    coords, bins = sort_into_bins(centres)
+    arr = np.asarray(image.img, dtype=np.int64)
+    
+    return arr, coords, bins
 
 
 def main():
@@ -63,21 +73,16 @@ def main():
     if src is None:
         print("Problem loading image!")
         sys.exit(1)
-
-    image1 = Image(copy.copy(src), SAMPLE_THRESHOLD)
-    image1.draw_contours()
-
-    centres = image1.get_centres()
-    coords, bins = sort_into_bins(centres)
-    part1 = np.asarray(image1.img, dtype=np.int64)
-    part1[:, :int(bins[1]), :] = 0
+        
+    arr1, coords1, bins = process_image(copy.copy(src), SAMPLE_THRESHOLD)
+    arr1[:, :int(bins[1]), :] = 0
+    arr2, coords2, _ = process_image(copy.copy(src), LADDER_THRESHOLD)
+    arr2[:, int(bins[1]):, :] = 0
     
-    image2 = Image(copy.copy(src), LADDER_THRESHOLD)
-    image2.draw_contours()
-    part2 = np.asarray(image2.img, dtype=np.int64)
-    part2[:, int(bins[1]):, :] = 0
+    coords = coords1
+    coords[0] = coords2[0]
     
-    image = np.asarray(part1 + part2, dtype=np.uint8)
+    image = np.asarray(arr1 + arr2, dtype=np.uint8)
     cv2.namedWindow("output", cv2.WINDOW_NORMAL)
     cv2.imshow("output", image)
     cv2.waitKey()
