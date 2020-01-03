@@ -1,3 +1,56 @@
+# C++ objects and libs
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+Makefile*
+*build-*
+*.qm
+*.prl
+
+# Qt unit tests
+target_wrapper.*
+
+# QtCreator
+*.autosave
+
+# QtCreator Qml
+*.qmlproject.user
+*.qmlproject.user.*
+
+# QtCreator CMake
+CMakeLists.txt.user*
+
+# QtCreator 4.8< compilation database 
+compile_commands.json
+
+# QtCreator local machine specific files for imported projects
+*creator.user*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -20,6 +73,8 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -38,12 +93,14 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
 .pytest_cache/
 
@@ -55,6 +112,7 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
+db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -72,11 +130,26 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# IPython
+profile_default/
+ipython_config.py
+
 # pyenv
 .python-version
 
-# celery beat schedule file
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
 celerybeat-schedule
+celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
@@ -102,12 +175,113 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.dmypy.json
+dmypy.json
 
-# IntelliJ IDEs
-.idea/
+# Pyre type checker
+.pyre/
 
-# CMake
-cmake-build-debug/
-
-# Mac
+!core/
+*.*#
+*.a
+*.app
+*.autosave
+*.core
+*.debug
+*.embed.manifest
+*.moc
+*.o
+*.obj
+*.orig
+*.prl
+*.qm
+*.rc
+*.rej
+*.res
+*.so
+*.so.*
+*_pch.h.cpp
+*_resource.rc
+*_wrapper.bat
+*_wrapper.sh
+*~
+.#*
 .DS_Store
+.qmake.cache
+.qmake.stash
+Makefile*
+Thumbs.db
+core
+moc_*.cpp
+qrc_*.cpp
+tags
+ui_*.h
+wrapper.bat
+wrapper.sh
+
+# qtcreator generated files
+*.creator.user*
+*.pro.user*
+*.pyqtc.user*
+*.qbs.user*
+*.qmlproject.user*
+CMakeLists.txt.user*
+/share/qtcreator/examples/
+/share/qtcreator/externaltools/
+/share/qtcreator/fonts/
+/share/qtcreator/generic-highlighter/
+/share/qtcreator/qmldesigner/QtProject/
+/src/app/Info.plist
+/src/plugins/**/*.json
+/src/plugins/coreplugin/ide_version.h
+/src/libs/qt-breakpad/bin
+/.cmake/
+app_version.h
+phony.c
+
+# xemacs temporary files
+*.flc
+
+# Vim temporary files
+.*.swp
+
+# Visual Studio generated files
+*.ib_pdb_index
+*.idb
+*.ilk
+*.ncb
+*.opensdf
+*.pdb
+*.sdf
+*.sln
+*.suo
+*.vcproj
+*.vcxproj
+*vcproj.*.*.user
+*vcxproj.*
+
+# gcov files
+*.gcda
+*.gcno
+*.gcov
+
+# MinGW generated files
+*.Debug
+*.Release
+
+# Python byte code
+*.pyc
+
+# translation related:
+/share/qtcreator/translations/*_tr.h
+/share/qtcreator/translations/qtcreator_untranslated.ts
+
+# Qml caching files
+*.jsc
+*.qmlc
+
+# Squish generated files
+/tests/system/suite_*/config.xml
+
+# Clang tooling files
+compile_commands.json
