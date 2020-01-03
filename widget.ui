@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>26</x>
@@ -24,7 +24,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,15">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,1">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="8,1,1">
       <item>
        <widget class="QLineEdit" name="lineEdit"/>
       </item>
@@ -32,6 +32,13 @@
        <widget class="QPushButton" name="selectFile">
         <property name="text">
          <string>Browse...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="loadImage">
+        <property name="text">
+         <string>Load</string>
         </property>
        </widget>
       </item>
@@ -43,6 +50,79 @@
        <string/>
       </property>
      </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>1113</x>
+     <y>0</y>
+     <width>20</width>
+     <height>871</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>30</y>
+     <width>281</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Number of columns:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Number of colours:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Ladder threshold:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Sample threshold:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QSpinBox" name="columns"/>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="colours"/>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="ladderThreshold"/>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sampleThreshold"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

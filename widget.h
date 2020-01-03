@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QDir>
 
 namespace Ui {
 class Widget;
@@ -17,10 +18,21 @@ public:
 
 private:
     Ui::Widget *ui;
+    QString directory = QDir::currentPath();
     QString fileName = "";
 
+    int numColumns = 5;
+    int numColours = 8;
+    int ladderThreshold = 5;
+    int sampleThreshold = 3;
+
 private slots:
-    void openFile();
+    void selectFile();
+    void loadImage();
+    void setColumns();
+    void setColours();
+    void setLadderThreshold();
+    void setSampleThreshold();
 };
 
 #endif // WIDGET_H
