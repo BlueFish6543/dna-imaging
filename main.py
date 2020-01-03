@@ -1,11 +1,14 @@
 import cv2
 import argparse
 import sys
+import copy
 from processing import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
 NUM_COLUMNS = 5
+LADDER_THRESHOLD = 5
+SAMPLE_THRESHOLD = 3
 
 
 def plot_calibration_data(calibration_data):
@@ -38,14 +41,24 @@ def calibrate(coords):
 
 def sort_into_bins(centres):
     centres = centres[np.argsort(centres[:, 0])]  # sort in ascending x coordinates
-    hist = plt.hist(centres[:, 0], bins=NUM_COLUMNS)[0]
+    hist, bins, patches = plt.hist(centres[:, 0], bins=NUM_COLUMNS)
     coords = []
     idx = 0
     for i in range(len(hist)):
         coords.append(centres[idx:idx + int(hist[i]), 1])
         idx += int(hist[i])
-    # print(coords)
-    return coords
+    return coords, bins
+    
+
+def process_image(src, threshold):
+    image = Image(src, threshold)
+    image.draw_contours()
+    
+    centres = image.get_centres()
+    coords, bins = sort_into_bins(centres)
+    arr = np.asarray(image.img, dtype=np.int64)
+    
+    return arr, coords, bins
 
 
 def main():
@@ -60,13 +73,19 @@ def main():
     if src is None:
         print("Problem loading image!")
         sys.exit(1)
-
-    image = Image(src)
-    image.draw_contours()
-    image.show()
-
-    centres = image.get_centres()
-    coords = sort_into_bins(centres)
+        
+    arr1, coords1, bins = process_image(copy.copy(src), SAMPLE_THRESHOLD)
+    arr1[:, :int(bins[1]), :] = 0
+    arr2, coords2, _ = process_image(copy.copy(src), LADDER_THRESHOLD)
+    arr2[:, int(bins[1]):, :] = 0
+    
+    coords = coords1
+    coords[0] = coords2[0]
+    
+    image = np.asarray(arr1 + arr2, dtype=np.uint8)
+    cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    cv2.imshow("output", image)
+    cv2.waitKey()
 
     if len(coords[0]) < 4:
         print("Insufficient data points to generate calibration line.")
@@ -85,4 +104,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(2)
