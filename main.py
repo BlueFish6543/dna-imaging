@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 NUM_COLUMNS = 5
 LADDER_THRESHOLD = 5
-SAMPLE_THRESHOLD = 1
+SAMPLE_THRESHOLD = 3
 
 
 def plot_calibration_data(calibration_data):
@@ -86,8 +86,6 @@ def main():
     cv2.namedWindow("output", cv2.WINDOW_NORMAL)
     cv2.imshow("output", image)
     cv2.waitKey()
-    
-    return
 
     if len(coords[0]) < 4:
         print("Insufficient data points to generate calibration line.")
