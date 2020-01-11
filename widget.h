@@ -20,11 +20,14 @@ private:
     Ui::Widget *ui;
     QString directory = QDir::currentPath();
     QString fileName = "";
+    const char *imageFileName;
 
     int numColumns = 5;
     int numColours = 8;
     int ladderThreshold = 5;
     int sampleThreshold = 3;
+
+    int ladderBands = -1;
 
 private slots:
     void selectFile();

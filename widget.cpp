@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "model.h"
 #include <QFileDialog>
 
 Widget::Widget(QWidget *parent) :
@@ -18,13 +19,20 @@ Widget::Widget(QWidget *parent) :
     ui->ladderThreshold->setMaximum(numColours);
     ui->ladderThreshold->setValue(ladderThreshold);
     ui->sampleThreshold->setMinimum(1);
-    ui->sampleThreshold->setMaximum(sampleThreshold);
+    ui->sampleThreshold->setMaximum(numColours);
     ui->sampleThreshold->setValue(sampleThreshold);
 
     connect(ui->columns, SIGNAL(valueChanged(int)), this, SLOT(setColumns()));
     connect(ui->colours, SIGNAL(valueChanged(int)), this, SLOT(setColours()));
     connect(ui->ladderThreshold, SIGNAL(valueChanged(int)), this, SLOT(setLadderThreshold()));
     connect(ui->sampleThreshold, SIGNAL(valueChanged(int)), this, SLOT(setSampleThreshold()));
+
+    ui->calibrationText->setText(QString("No ladder bands detected."));
+
+    ResultsModel *model = new ResultsModel(0);
+    ui->results->setModel(model);
+    ui->results->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->results->show();
 }
 
 Widget::~Widget()

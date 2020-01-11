@@ -22,7 +22,7 @@
      <height>801</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,15">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,15">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="8,1,1">
       <item>
@@ -45,6 +45,19 @@
      </layout>
     </item>
     <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <widget class="QLabel" name="picture">
       <property name="text">
        <string/>
@@ -56,7 +69,7 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>1113</x>
+     <x>1140</x>
      <y>0</y>
      <width>20</width>
      <height>871</height>
@@ -69,60 +82,185 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>1200</x>
+     <x>1220</x>
      <y>30</y>
-     <width>281</width>
-     <height>151</height>
+     <width>271</width>
+     <height>801</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+   <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,0,0,0,1">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
       <item>
-       <widget class="QLabel" name="label">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Number of columns:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Number of colours:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Ladder threshold:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Sample threshold:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QSpinBox" name="columns"/>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="colours"/>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="ladderThreshold"/>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sampleThreshold"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findContours">
         <property name="text">
-         <string>Number of columns:</string>
+         <string>Find contours</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <spacer name="verticalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="calibrationText">
         <property name="text">
-         <string>Number of colours:</string>
+         <string>TextLabel</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QPlainTextEdit" name="plainTextEdit"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="warningMessage">
         <property name="text">
-         <string>Ladder threshold:</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
+       <spacer name="verticalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>Sample threshold:</string>
+         <string>Calibrate and fit data</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>Show calibration plot</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QSpinBox" name="columns"/>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="colours"/>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="ladderThreshold"/>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sampleThreshold"/>
-      </item>
-     </layout>
+     <spacer name="verticalSpacer_6">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Results</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableView" name="results"/>
     </item>
    </layout>
   </widget>
