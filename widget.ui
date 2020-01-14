@@ -79,7 +79,7 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>1220</x>
@@ -88,7 +88,7 @@
      <height>801</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,0,0,0,1">
+   <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,5,0,0,3">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
       <item>
@@ -201,6 +201,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="calibrationHelpText">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPlainTextEdit" name="plainTextEdit"/>
       </item>
       <item>
@@ -211,20 +218,7 @@
        </widget>
       </item>
       <item>
-       <spacer name="verticalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="calibrate">
         <property name="text">
          <string>Calibrate and fit data</string>
         </property>

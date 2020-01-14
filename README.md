@@ -2,47 +2,47 @@
 
 ## Setup
 
-Python dependencies: `opencv-python, numpy, matplotlib`.
+This project runs mainly on Python. It uses the following packages:
 
-These can be installed e.g. using
-a package manager like `pip` or within an IDE.
+* OpenCV for image processing
+* NumPy for numerical processing
+* Matplotlib for plotting
+* PySide2 for the graphical user interface
+
+The project has been tested on **Python 3** and may not work on Python 2.
+These packages can be installed e.g. using `pip3`. On Ubuntu:
+
+```
+sudo apt install python3-pip
+sudo pip3 install opencv-python numpy matplotlib PySide2
+```
 
 ## Running
 
 ```
-python main.py images/3.jpg
+python3 main.py
 ```
+
+A window such as the following will appear:
+
+![Widget](images/widget1.png)
+
+Choose the desired image by clicking browse (followed by load). Choose the desired parameters on the right and click
+the 'Find contours' button. The image will be updated and the program will display the number of bands detected in the
+ladder region. The user needs to manually key in the base pair values for the ladder region, ensuring that the number
+of values keyed in matches the number of bands detected. Then click the 'Calibrate and fit data' button and the results
+will be updated in the table below.
+
+Sample output after performing all the above steps:
+
+![Widget](images/widget2.png)
 
 ## Explanation
 
 The code first performs colour quantisation followed by binary thresholding.
 It then finds contours and performs PCA analysis to obtain the centres of each contour region.
-
-Currently the parameters `NUM_COLOURS` and `THRESHOLD` in `processing.py` need to be tuned manually to get the best
-possible output.
-
-The program then separates the contours into columns. However currently one needs to
-manually pass `NUM_COLUMNS` as a parameter in `main.py` to get a good result.
-It assumes that the reference ladder is on the left and prompts the user for calibration
-data such as the following, if there are sufficient data points:
-
-```text
-Enter value for reference point at y coordinate 14:
-```
-
-After collecting the reference data it plots a line of best fit on a semilog graph, and
-plots the rest of the data on the line.
-
-
-## Sample output
-
-Finding contours:
-
-![Sample output image](images/screenshot2.png)
-
-Plotting the data:
-
-![Sample output image](images/screenshot3.png)
+It assumes that the reference ladder is on the left.
+After collecting the calibration data it tries to obtain a line of best fit on a semilog graph.
 
 ## Tutorials
 
