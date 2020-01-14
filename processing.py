@@ -48,11 +48,11 @@ class Image:
         self.centres.append(cntr)
 
         # Draw the principal components
-        cv2.circle(self.img, (cntr[0], cntr[1]), 3, (255, 0, 255), 2)
+        cv2.circle(self.img, (cntr[0], cntr[1]), 3, (255, 0, 255), 1)
         p1 = cntr + 0.02 * eigenvectors[0] * eigenvalues[0]
         p2 = cntr - 0.02 * eigenvectors[1] * eigenvalues[1]
-        self._draw_axis(copy.copy(cntr), p1, (0, 255, 0), 2)
-        self._draw_axis(copy.copy(cntr), p2, (255, 255, 0), 10)
+        # self._draw_axis(copy.copy(cntr), p1, (0, 255, 0), 2)
+        # self._draw_axis(copy.copy(cntr), p2, (255, 255, 0), 10)
 
         return np.arctan2(eigenvectors[0, 1], eigenvectors[0, 0])  # orientation in radians
 
@@ -94,7 +94,7 @@ class Image:
                 continue
 
             # Draw each contour only for visualisation purposes
-            cv2.drawContours(self.img, contours, i, (0, 0, 255), 2)
+            cv2.drawContours(self.img, contours, i, (0, 0, 255), 1)
 
             # Find the orientation of each shape
             self._get_orientation(contours[i])
