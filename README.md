@@ -9,6 +9,8 @@ This project runs mainly on Python. It uses the following packages:
 * Matplotlib for plotting
 * PySide2 for the graphical user interface
 
+Note: PySide2 (aka Qt for Python) is the ofifcial Python wrapper for Qt. The GUI runs on Qt.
+
 The project has been tested on **Python 3** and may not work on Python 2.
 These packages can be installed e.g. using `pip3`. On Ubuntu:
 

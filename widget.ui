@@ -92,7 +92,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="7,2">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0">
           <item>
@@ -105,7 +105,7 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Number of colours:</string>
+             <string>Number of threshold levels:</string>
             </property>
            </widget>
           </item>
