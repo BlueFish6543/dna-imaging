@@ -19,6 +19,29 @@ sudo apt install python3-pip
 sudo pip3 install opencv-python numpy matplotlib PySide2
 ```
 
+### Raspberry Pi
+
+Raspberry Pi runs on Raspbian which is based on Debian. Installation is not as straightfoward as some packages are not easily available. The required packages have been compiled in the file `install.sh`:
+
+```
+chmod +x install.sh
+sudo ./install.sh
+```
+
+Then, in the Raspberry Pi's `~/.bashrc` file, add the following line
+
+```
+export LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1
+```
+
+and run
+
+```
+source ~/.bashrc
+```
+
+to reload bash. This has been tested on Raspbian GNU/Linux 10 (buster).
+
 ## Running
 
 ```
