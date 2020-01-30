@@ -3,14 +3,12 @@ import copy
 import cv2
 import numpy as np
 
-NUM_COLOURS = 8
-
-
 class Image:
-    def __init__(self, src, threshold):
+    def __init__(self, src, threshold, num_colours):
         self.img = src
         self.centres = []
         self.threshold = threshold
+        self.num_colours = num_colours
 
     def _draw_axis(self, p, q, colour, scale=0.2):
         angle = np.arctan2(p[1] - q[1], p[0] - q[0])
@@ -63,7 +61,7 @@ class Image:
 
         # Define criteria and apply kmeans
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-        ret, label, centre = cv2.kmeans(img, NUM_COLOURS, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+        ret, label, centre = cv2.kmeans(img, self.num_colours, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
         intensities = cv2.cvtColor(np.array([centre]), cv2.COLOR_BGR2GRAY)
         intensities = np.int64(np.sort(np.squeeze(intensities)))
 
@@ -81,7 +79,7 @@ class Image:
         gray = cv2.cvtColor(quantized, cv2.COLOR_BGR2GRAY)
 
         # Convert image to binary
-        thresh = intensities[NUM_COLOURS - self.threshold] - 2
+        thresh = intensities[self.num_colours - self.threshold] - 2
         retval, bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
 
         # Find all the contours in the threshold range

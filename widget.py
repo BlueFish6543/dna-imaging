@@ -1,9 +1,13 @@
-from PySide2.QtWidgets import QWidget, QFileDialog, QHeaderView, QShortcut
-from PySide2.QtCore import QDir, QObject, QFileInfo, SIGNAL, Qt
+from PySide2.QtWidgets import QWidget, QFileDialog, QHeaderView, QShortcut, QApplication
+from PySide2.QtCore import QDir, QObject, QFileInfo, SIGNAL, Qt, QFile
 from PySide2.QtGui import QPixmap, QImage, QKeySequence
+from PySide2.QtUiTools import QUiLoader
 import numpy as np
+import os
 from model import ResultsModel
 import imaging
+from dialog import Dialog
+import utils
 
 class Widget(QWidget):
     def __init__(self, ui):
@@ -12,6 +16,8 @@ class Widget(QWidget):
         self.ui = ui
         self.directory = QDir.currentPath()
         self.file_name = ""
+
+        self.pixmap = None
 
         self.num_columns = 5
         self.num_colours = 8
@@ -25,6 +31,8 @@ class Widget(QWidget):
 
         QObject.connect(ui.selectFile, SIGNAL ('clicked()'), self.select_file)
         QObject.connect(ui.loadImage, SIGNAL ('clicked()'), self.load_image)
+        QObject.connect(ui.saveImage, SIGNAL ('clicked()'), self.save_image)
+        QObject.connect(ui.sendEmail, SIGNAL ('clicked()'), self.show_dialog)
 
         self.ui.columns.setMinimum(2)
         self.ui.columns.setValue(self.num_columns)
@@ -53,6 +61,15 @@ class Widget(QWidget):
         QObject.connect(self.ui.findContours, SIGNAL ('clicked()'), self.update_calibration_text)
         QObject.connect(self.ui.calibrate, SIGNAL ('clicked()'), self.parse_calibration_base_pairs)
 
+        ui_file = QFile("dialog.ui")
+        ui_file.open(QFile.ReadOnly)
+        loader = QUiLoader()
+        ui = loader.load(ui_file)
+        ui_file.close()
+
+        self.dialog = Dialog(ui)
+        QObject.connect(self.dialog.ui, SIGNAL ('accepted()'), self.send_email)
+
         quit_shortcut = QShortcut(QKeySequence.Quit, self.ui)
         close_shortcut = QShortcut(QKeySequence.Close, self.ui)
         QObject.connect(quit_shortcut, SIGNAL ('activated()'), self.ui.close)
@@ -60,7 +77,7 @@ class Widget(QWidget):
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
-            self, "Select File", self.directory, "Images (*.png *.jpg)"
+            self, "Select file", self.directory, "Images (*.png *.jpg)"
         )[0]
         self.ui.lineEdit.setText(self.file_name)
         f = QFileInfo(self.file_name)
@@ -75,6 +92,32 @@ class Widget(QWidget):
             h = self.ui.picture.height()
             self.ui.picture.setPixmap(pic.scaled(w, h, Qt.KeepAspectRatio))
             self.ui.picture.setAlignment(Qt.AlignCenter)
+
+    def save_image(self):
+        if not self.pixmap:
+            return
+        file_name = QFileDialog.getSaveFileName(
+            self, "Save file", self.directory, "Images (*.png *.jpg)"
+        )[0]
+        info = QFileInfo(file_name)
+        if not info.suffix():
+            file_name += ".png"
+        self.pixmap.save(file_name)
+
+    def show_dialog(self):
+        if not self.pixmap:
+            return
+        self.dialog.show()
+
+    def send_email(self):
+        file_name, email_address = self.dialog.get_data()
+        info = QFileInfo(file_name)
+        if not info.suffix():
+            file_name += ".png"
+        file_name = os.path.join(os.getcwd(), "tmp", file_name)
+        self.pixmap.save(file_name)
+
+        os.remove(file_name)
 
     def set_columns(self):
         self.num_columns = self.ui.columns.value()
@@ -96,14 +139,15 @@ class Widget(QWidget):
         else:
             # https://stackoverflow.com/questions/34232632/convert-python-opencv-image-numpy-array-to-pyqt-qpixmap-image
             img, coords = imaging.find_contours(
-                self.file_name, self.sample_threshold, self.ladder_threshold, self.num_columns)
+                self.file_name, self.sample_threshold, self.ladder_threshold, self.num_columns, self.num_colours)
             height, width, channel = img.shape
             bytes_per_line = 3 * width
             qimg = QImage(img.data, width, height, bytes_per_line, QImage.Format_RGB888)
+            self.pixmap = QPixmap.fromImage(qimg)
 
             w = self.ui.picture.width()
             h = self.ui.picture.height()
-            self.ui.picture.setPixmap(QPixmap.fromImage(qimg).scaled(w, h, Qt.KeepAspectRatio))
+            self.ui.picture.setPixmap(self.pixmap.scaled(w, h, Qt.KeepAspectRatio))
             self.ui.picture.setAlignment(Qt.AlignCenter)
 
             self.coords = coords

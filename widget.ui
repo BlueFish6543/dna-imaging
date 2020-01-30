@@ -16,8 +16,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>26</x>
-     <y>26</y>
+     <x>20</x>
+     <y>30</y>
      <width>1061</width>
      <height>801</height>
     </rect>
@@ -69,7 +69,7 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>1140</x>
+     <x>1130</x>
      <y>0</y>
      <width>20</width>
      <height>871</height>
@@ -82,13 +82,44 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>1220</x>
+     <x>1190</x>
      <y>30</y>
-     <width>271</width>
+     <width>311</width>
      <height>801</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,5,0,0,3">
+   <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,1,5,0,0,3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="saveImage">
+        <property name="text">
+         <string>Save result</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sendEmail">
+        <property name="text">
+         <string>Send via email</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
       <item>
@@ -241,7 +272,7 @@
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>40</height>
+        <height>20</height>
        </size>
       </property>
      </spacer>

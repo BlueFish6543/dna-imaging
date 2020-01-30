@@ -6,10 +6,6 @@ from processing import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-NUM_COLUMNS = 5
-LADDER_THRESHOLD = 5
-SAMPLE_THRESHOLD = 3
-
 
 def plot_calibration_data(calibration_data):
     # Fit to log(y) = a + b x
@@ -35,8 +31,8 @@ def sort_into_bins(centres, num_columns):
     return coords, bins
     
 
-def process_image(src, threshold, num_columns):
-    image = Image(src, threshold)
+def process_image(src, threshold, num_columns, num_colours):
+    image = Image(src, threshold, num_colours)
     image.draw_contours()
     
     centres = image.get_centres()
@@ -46,13 +42,13 @@ def process_image(src, threshold, num_columns):
     return arr, coords, bins
 
 
-def find_contours(src, sample_threshold, ladder_threshold, num_columns):
+def find_contours(src, sample_threshold, ladder_threshold, num_columns, num_colours):
     src = cv2.imread(src)
     assert src is not None
 
-    arr1, coords1, bins = process_image(copy.copy(src), SAMPLE_THRESHOLD, num_columns)
+    arr1, coords1, bins = process_image(copy.copy(src), sample_threshold, num_columns, num_colours)
     arr1[:, :int(bins[1]), :] = 0
-    arr2, coords2, _ = process_image(copy.copy(src), LADDER_THRESHOLD, num_columns)
+    arr2, coords2, _ = process_image(copy.copy(src), ladder_threshold, num_columns, num_colours)
     arr2[:, int(bins[1]):, :] = 0
     image = np.asarray(arr1 + arr2, dtype=np.uint8)
 
