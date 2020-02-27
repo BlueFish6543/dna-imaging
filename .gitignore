@@ -285,3 +285,5 @@ phony.c
 
 # Clang tooling files
 compile_commands.json
+
+.png

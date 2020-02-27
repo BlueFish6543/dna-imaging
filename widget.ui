@@ -16,9 +16,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>30</x>
      <y>30</y>
-     <width>1061</width>
+     <width>1071</width>
      <height>801</height>
     </rect>
    </property>
@@ -45,17 +45,11 @@
      </layout>
     </item>
     <item>
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+     <widget class="QPushButton" name="takePicture">
+      <property name="text">
+       <string>Take picture</string>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="picture">
@@ -82,9 +76,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>1190</x>
+     <x>1180</x>
      <y>30</y>
-     <width>311</width>
+     <width>321</width>
      <height>801</height>
     </rect>
    </property>
