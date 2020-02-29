@@ -78,7 +78,7 @@ class Widget(QWidget):
 
         QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), self.take_picture)
         self.ui.whiteBalance.addItems(camera.MODES)
-        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentIndexChanged()'), self.select_white_balance)
+        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentIndexChanged(int)'), self.select_white_balance)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
