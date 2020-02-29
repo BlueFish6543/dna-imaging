@@ -136,6 +136,7 @@ class Widget(QWidget):
         file_name = os.path.join(os.getcwd(), "tmp", file_name)
         self.pixmap.save(file_name)
 
+        utils.send_mail("", [email_address], "Image", "Image sent from Raspberry Pi", file_name)
         os.remove(file_name)
 
     def set_columns(self):
