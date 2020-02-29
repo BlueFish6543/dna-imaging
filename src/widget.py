@@ -78,7 +78,7 @@ class Widget(QWidget):
 
         QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), self.take_picture)
         self.ui.whiteBalance.addItems(camera.MODES)
-        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentTextChanged()'), self.select_white_balance)
+        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentIndexChanged()'), self.select_white_balance)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
@@ -104,6 +104,7 @@ class Widget(QWidget):
         self.load_image()
 
     def select_white_balance(self):
+        print(self.ui.whiteBalance.currentText())
         camera.set_white_balance(self.ui.whiteBalance.currentText())
 
     def save_image(self):
@@ -136,6 +137,7 @@ class Widget(QWidget):
         self.num_columns = self.ui.columns.value()
 
     def set_colours(self):
+MODES = [
         self.num_colours = self.ui.colours.value()
         self.ui.ladderThreshold.setMaximum(self.num_colours)
         self.ui.sampleThreshold.setMaximum(self.num_colours)
