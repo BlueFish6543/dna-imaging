@@ -8,7 +8,7 @@ from src.model import ResultsModel
 import src.imaging as imaging
 from src.dialog import Dialog
 import src.utils as utils
-# from src.camera import take_picture
+from src.camera import take_picture
 
 class Widget(QWidget):
     def __init__(self, ui):
@@ -76,7 +76,7 @@ class Widget(QWidget):
         QObject.connect(quit_shortcut, SIGNAL ('activated()'), self.ui.close)
         QObject.connect(close_shortcut, SIGNAL ('activated()'), self.ui.close)
 
-        # QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), take_picture)
+        QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), take_picture)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
