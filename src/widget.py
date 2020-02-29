@@ -77,6 +77,8 @@ class Widget(QWidget):
         QObject.connect(close_shortcut, SIGNAL ('activated()'), self.ui.close)
 
         QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), self.take_picture)
+        self.ui.whiteBalance.addItems(camera.MODES)
+        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentTextChanged()'), self.select_white_balance)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
@@ -100,6 +102,9 @@ class Widget(QWidget):
         camera.take_picture()
         self.file_name = os.path.join(os.getcwd(), 'tmp', 'image.jpg')
         self.load_image()
+
+    def select_white_balance(self):
+        camera.set_white_balance(self.ui.whiteBalance.currentText())
 
     def save_image(self):
         if not self.pixmap:

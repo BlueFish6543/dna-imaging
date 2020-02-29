@@ -5,6 +5,20 @@ import time
 from picamera import PiCamera
 
 camera = PiCamera()
+MODES = [
+    'auto',
+    'sunlight',
+    'cloudy',
+    'shade',
+    'tungsten',
+    'fluorescent',
+    'incandescent',
+    'flash',
+    'horizon'
+]
+
+def set_white_balance(mode):
+    camera.awb_mode = mode
 
 def take_picture():
     camera.start_preview()
