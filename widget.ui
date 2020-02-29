@@ -22,7 +22,7 @@
      <height>801</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,15">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,15">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="8,1,1">
       <item>
@@ -50,6 +50,19 @@
        <string>Take picture</string>
       </property>
      </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <widget class="QLabel" name="picture">
