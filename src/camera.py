@@ -6,18 +6,20 @@ from picamera import PiCamera
 
 camera = PiCamera()
 MODES = [
-    'auto',
-    'sunlight',
-    'cloudy',
-    'shade',
-    'tungsten',
-    'fluorescent',
-    'incandescent',
-    'flash',
-    'horizon'
+    'Auto',
+    'Sunlight',
+    'Cloudy',
+    'Shade',
+    'Tungsten',
+    'Fluorescent',
+    'Incandescent',
+    'Flash',
+    'Horizon'
 ]
 
 def set_white_balance(mode):
+    mode = mode.lower()
+    print(mode)
     camera.awb_mode = mode
 
 def take_picture():

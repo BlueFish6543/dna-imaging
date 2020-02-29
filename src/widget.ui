@@ -45,7 +45,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="6,1">
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="8,1">
       <item>
        <widget class="QPushButton" name="takePicture">
         <property name="text">
