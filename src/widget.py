@@ -4,11 +4,11 @@ from PySide2.QtGui import QPixmap, QImage, QKeySequence
 from PySide2.QtUiTools import QUiLoader
 import numpy as np
 import os
-from model import ResultsModel
-import imaging
-from dialog import Dialog
-import utils
-from camera import take_picture
+from src.model import ResultsModel
+import src.imaging as imaging
+from src.dialog import Dialog
+import src.utils as utils
+# from src.camera import take_picture
 
 class Widget(QWidget):
     def __init__(self, ui):
@@ -62,7 +62,7 @@ class Widget(QWidget):
         QObject.connect(self.ui.findContours, SIGNAL ('clicked()'), self.update_calibration_text)
         QObject.connect(self.ui.calibrate, SIGNAL ('clicked()'), self.parse_calibration_base_pairs)
 
-        ui_file = QFile("dialog.ui")
+        ui_file = QFile(os.path.join(os.getcwd(), 'src', 'dialog.ui'))
         ui_file.open(QFile.ReadOnly)
         loader = QUiLoader()
         ui = loader.load(ui_file)
@@ -76,7 +76,7 @@ class Widget(QWidget):
         QObject.connect(quit_shortcut, SIGNAL ('activated()'), self.ui.close)
         QObject.connect(close_shortcut, SIGNAL ('activated()'), self.ui.close)
 
-        QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), take_picture)
+        # QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), take_picture)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(

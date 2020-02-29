@@ -2,7 +2,7 @@ import cv2
 import argparse
 import sys
 import copy
-from processing import Image
+from src.processing import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
