@@ -6,3 +6,4 @@ apt -y install python3-pyside2.qt3dcore python3-pyside2.qt3dinput python3-pyside
 pip3 install opencv-python
 apt -y install libjasper1 libatlas-base-dev
 apt -y install libqtgui4 libqt4-test
+apt -y install picamera
