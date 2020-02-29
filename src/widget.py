@@ -8,7 +8,12 @@ from src.model import ResultsModel
 import src.imaging as imaging
 from src.dialog import Dialog
 import src.utils as utils
-import src.camera as camera
+try:
+    # So that we can test without a Raspberry Pi
+    import src.camera as camera
+    include_camera = True
+except ModuleNotFoundError:
+    include_camera = False
 
 class Widget(QWidget):
     def __init__(self, ui):
@@ -76,9 +81,10 @@ class Widget(QWidget):
         QObject.connect(quit_shortcut, SIGNAL ('activated()'), self.ui.close)
         QObject.connect(close_shortcut, SIGNAL ('activated()'), self.ui.close)
 
-        QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), self.take_picture)
-        self.ui.whiteBalance.addItems(camera.MODES)
-        QObject.connect(self.ui.whiteBalance, SIGNAL ('currentIndexChanged(int)'), self.select_white_balance)
+        if include_camera:
+            QObject.connect(self.ui.takePicture, SIGNAL ('clicked()'), self.take_picture)
+            self.ui.whiteBalance.addItems(camera.MODES)
+            QObject.connect(self.ui.whiteBalance, SIGNAL ('currentIndexChanged(int)'), self.select_white_balance)
 
     def select_file(self):
         self.file_name = QFileDialog.getOpenFileName(
