@@ -19,7 +19,6 @@ MODES = [
 
 def set_white_balance(mode):
     mode = mode.lower()
-    print(mode)
     camera.awb_mode = mode
 
 def take_picture():

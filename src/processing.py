@@ -83,7 +83,11 @@ class Image:
         retval, bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
 
         # Find all the contours in the threshold range
-        _, contours, _ = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        try:
+            # OpenCV compatibility issues
+            _, contours, _ = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        except ValueError:
+            contours, _ = cv2.findContours(bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
         for i in range(len(contours)):
             x, y, w, h = cv2.boundingRect(contours[i])

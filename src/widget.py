@@ -104,7 +104,6 @@ class Widget(QWidget):
         self.load_image()
 
     def select_white_balance(self):
-        print(self.ui.whiteBalance.currentText())
         camera.set_white_balance(self.ui.whiteBalance.currentText())
 
     def save_image(self):
