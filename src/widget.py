@@ -137,7 +137,6 @@ class Widget(QWidget):
         self.num_columns = self.ui.columns.value()
 
     def set_colours(self):
-MODES = [
         self.num_colours = self.ui.colours.value()
         self.ui.ladderThreshold.setMaximum(self.num_colours)
         self.ui.sampleThreshold.setMaximum(self.num_colours)
