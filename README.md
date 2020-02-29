@@ -42,6 +42,21 @@ source ~/.bashrc
 
 to reload bash. This has been tested on Raspbian GNU/Linux 10 (buster).
 
+#### Raspberry Pi Camera
+
+The silver connectors should face the HDMI port. First enable the camera using
+
+```
+sudo raspi-config
+```
+
+To test whether the camera is correctly connected one can run `vcgencmd get_camera`.
+To take a test image one can run `raspistill -o test.jpg`.
+
+## SSH to Raspberry Pi
+
+When connecting over e.g. Ubuntu use X forwarding using the `-X` flag. 
+
 ## Running
 
 ```
